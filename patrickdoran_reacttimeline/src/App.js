@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './timeline.css';
+import {timeline} from './timeline.js';
+
+
+timeline(document.querySelectorAll('.timeline'));
+
+
 
 class App extends Component {
   render() {
