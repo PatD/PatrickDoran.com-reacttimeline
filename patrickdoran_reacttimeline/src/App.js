@@ -1,4 +1,4 @@
-import React, { Component,/* useEffect, useState */ } from 'react';
+import React, { Component /* ,useEffect, useState */ } from 'react';
 import './timeline.css';
 import { timeline } from './timeline.js';
 
@@ -29,8 +29,8 @@ const wordPressGraphQLquery = `{
 const PatrickDoranTimelineEntry = (props)=>{
   return (
         <div className='timeline__content'>
-          <h3><em>{props.entryDate}</em></h3>
-          {props.entryTitle}
+          <h4>{props.entryDate}</h4>
+          <em>{props.entryTitle}</em>
         </div>
   )
 }
@@ -92,7 +92,7 @@ class PatrickDoranTimeline extends Component {
     }
 
     return (
-      <div className='timeline' data-mode='horizontal' data-rtl-mode='true'>
+      <div className='timeline' data-mode='horizontal' data-rtl-mode='true' data-visible-items="5">
         <div className='timeline__wrap'>
           <div className='timeline__items'>
             {results.map(result =>
