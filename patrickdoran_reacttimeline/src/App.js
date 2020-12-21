@@ -1,21 +1,42 @@
-import React, { Component, useEffect, useState } from 'react';
-
+import React, { Component,/* useEffect, useState */ } from 'react';
 import './timeline.css';
 import { timeline } from './timeline.js';
 
+// GraphQL endpoint and query:
+const wordPressGraphQL = 'https://patrickdoran.com/headless/graphql'
+const wordPressGraphQLquery = `{
+  posts(first:50, where: {categoryName: "Timeline", orderby: {field: DATE, order: ASC}}) {
+    edges {
+      node {
+        date
+        postId
+        title
+      }
+    }
+  }
+}`;
 
-let wordPressGraphQL = 'https://patrickdoran.com/headless/graphql'
-
-
-function buildTimeline(){
-  useEffect(() => {
+// function buildTimeline(){
+//   useEffect(() => {
  
-    console.log('lifecycle')
-  }, []);
+//     console.log('lifecycle')
+//   }, []);
 
+// }
+
+
+// Component for an individual timeline entry
+const PatrickDoranTimelineEntry = (props)=>{
+  return (
+        <div className='timeline__content'>
+          <h3><em>{props.entryDate}</em></h3>
+          {props.entryTitle}
+        </div>
+  )
 }
 
 
+// Make a React Component that loads data into a timeline.
 class PatrickDoranTimeline extends Component {
 
   constructor(props) {
@@ -28,6 +49,7 @@ class PatrickDoranTimeline extends Component {
   }
 
   componentDidMount() {
+
     this.setState({ isLoading: true })
 
     fetch(wordPressGraphQL, {
@@ -36,26 +58,12 @@ class PatrickDoranTimeline extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: `
-          {
-          posts {
-            edges {
-              node {
-                excerpt
-                date
-                postId
-                title
-                content
-              }
-            }
-          }
-          }
-        `,
+        query:wordPressGraphQLquery,
       })
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data.data.posts.edges);
+        // console.log('Success:', data.data.posts.edges);
         let results = data.data.posts.edges
         this.setState({ results, isLoading: false })
       })
@@ -75,23 +83,24 @@ class PatrickDoranTimeline extends Component {
   }
   
 
-  
 
   render() {
     const { results, isLoading } = this.state;
 
     if (isLoading) {
-      return <p>Loading ...</p>;
+      return <p>Loading Timeline ...</p>;
     }
 
     return (
-      <div className='timeline' data-mode='horizontal' data-rtl-mode='true' data-force-vertical-mode='300'>
+      <div className='timeline' data-mode='horizontal' data-rtl-mode='true'>
         <div className='timeline__wrap'>
           <div className='timeline__items'>
             {results.map(result =>
               <div className='timeline__item' key={result.node.postId}>
-                <div className='timeline__content'>
-                  {result.node.title}</div>
+                  <PatrickDoranTimelineEntry 
+                    entryTitle={result.node.title} 
+                    entryDate={result.node.date.substr(0,4)} 
+                  />
               </div>
             )}
           </div>
