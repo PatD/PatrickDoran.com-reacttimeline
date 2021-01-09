@@ -29,8 +29,8 @@ const wordPressGraphQLquery = `{
 const PatrickDoranTimelineEntry = (props)=>{
   return (
         <div className='timeline__content'>
-          <h4>{props.entryDate}</h4>
-          <em>{props.entryTitle}</em>
+          <strong><time dateTime={props.entryDate}>{props.entryDate}</time></strong>
+          <p><em>{props.entryTitle}</em></p>
         </div>
   )
 }
